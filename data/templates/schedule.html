@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto py-10 px-6 bg-white dark:bg-gray-800 rounded shadow">
+  <h2 class="text-2xl font-bold mb-6 text-purple-700 dark:text-purple-300">Schedule Message</h2>
+
+  <form method="POST" action="/schedule/{{ message.id }}">
+      <!-- Message Type (disabled) -->
+      <div>
+          <label class="block mb-2 font-medium text-gray-700 dark:text-gray-300">Message Type</label>
+          <select name="message_type" id="message_type" disabled
+                  class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 cursor-not-allowed">
+              <option value="{{ message.channel }}">{{ message.channel|capitalize }}</option>
+          </select>
+      </div>
+
+      <!-- Subject (only visible if type is email) -->
+      <div id="email-subject" class="{% if message.channel != 'email' %}hidden{% endif %} mt-4">
+          <label class="block mb-2 font-medium text-gray-700 dark:text-gray-300">Subject</label>
+          <input type="text" name="subject" value="{{ message.content['subject'] }}" disabled
+                 class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+
+      <!-- Message -->
+      <div class="mt-4">
+          <label class="block mb-2 font-medium text-gray-700 dark:text-gray-300">Message</label>
+          <textarea name="content" rows="4" required disabled
+                    class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white">{{ message.content['message'] }}</textarea>
+      </div>
+
+      <div class="mb-4">
+        <label for="schedule_time" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Schedule Time</label>
+        <input type="datetime-local" name="schedule_time" required id="schedule_time"
+               class="w-full px-4 py-2 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+               value="{{ message.schedule_time }}" disabled >
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Select Contacts</h3>
+        <div class="space-y-2 max-h-64 overflow-y-auto">
+          {% for contact in contacts %}
+            {% if channel == 'email' and contact.email %}
+              <label class="flex items-center space-x-3 text-gray-700 dark:text-gray-200">
+                <input type="checkbox" name="contacts" value="{{ contact.id }}" class="form-checkbox text-purple-600">
+                <span>{{ contact.name }} - {{ contact.email }}</span>
+              </label>
+            {% elif (channel == 'sms' or channel == 'whatsapp') and contact.phone %}
+              <label class="flex items-center space-x-3 text-gray-700 dark:text-gray-200">
+                <input type="checkbox" name="contacts" value="{{ contact.id }}" class="form-checkbox text-purple-600">
+                <span>{{ contact.name }} - {{ contact.phone }}</span>
+              </label>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="submit" class="px-6 py-2 bg-purple-700 text-white rounded hover:bg-purple-800">Schedule</button>
+  </form>
+</div>
+{% endblock %}

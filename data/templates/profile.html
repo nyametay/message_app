@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10">
+
+  <!-- Profile Card -->
+  <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+    <div class="flex flex-col md:flex-row items-center md:items-start p-6">
+
+      <!-- Avatar -->
+      <div class="flex-shrink-0 w-28 h-28 rounded-full bg-purple-200 dark:bg-purple-600 flex items-center justify-center text-4xl font-bold text-purple-700 dark:text-white">
+        {{ user.name[0] }}
+      </div>
+
+      <!-- Info -->
+      <div class="mt-6 md:mt-0 md:ml-8 flex-1">
+        <h2 class="text-2xl font-bold text-purple-700 dark:text-purple-400">{{ user.name }}</h2>
+        <p class="text-gray-600 dark:text-gray-300">@{{ user.username }}</p>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">{{ user.email }}</p>
+
+        <div class="mt-4">
+          <a href="{{ url_for('settings') }}"
+             class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-500 transition">
+            Edit Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 border-t dark:border-gray-700">
+      <div class="p-6 text-center">
+        <p class="text-3xl font-bold text-purple-700 dark:text-purple-400">{{ total_messages }}</p>
+        <p class="text-gray-600 dark:text-gray-300">Messages Scheduled</p>
+      </div>
+      <div class="p-6 text-center">
+        <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ sent_messages }}</p>
+        <p class="text-gray-600 dark:text-gray-300">Messages Sent</p>
+      </div>
+      <div class="p-6 text-center">
+        <p class="text-3xl font-bold text-red-600 dark:text-red-400">{{ failed_messages }}</p>
+        <p class="text-gray-600 dark:text-gray-300">Failed Deliveries</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" class="overflow-x-hidden">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - MessageApp</title>
+  <script>
+    // Apply saved dark mode on load
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' };
+  </script>
+</head>
+
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans overflow-x-hidden min-h-screen">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+      <h1 class="text-2xl font-bold text-purple-700 dark:text-purple-400">MessageApp</h1>
+
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center gap-4">
+        <a href="/home" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Home</a>
+        <a href="/messages" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Compose</a>
+        <a href="/contacts" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Contacts</a>
+
+        <!-- Profile Dropdown -->
+        <div class="relative">
+          <button id="profile-menu-toggle" class="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 focus:outline-none">
+            <span>Account</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="profile-menu" class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-50">
+            <a href="/profile" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Profile</a>
+            <a href="/settings" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Settings</a>
+            <a href="/logout" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600">Logout</a>
+          </div>
+        </div>
+
+        <button id="toggle-theme" class="text-purple-700 dark:text-purple-300 focus:outline-none">
+          <svg id="theme-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"></svg>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <div class="md:hidden flex items-center">
+        <button id="menu-toggle" class="text-purple-700 dark:text-purple-300 focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="menu" class="hidden md:hidden bg-white dark:bg-gray-800 shadow-md">
+      <nav class="flex flex-col space-y-4 px-6 py-4">
+        <a href="/home" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Home</a>
+        <a href="/messages" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Compose</a>
+        <a href="/contacts" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Contacts</a>
+
+        <!-- Mobile Profile Dropdown -->
+        <details class="group">
+          <summary class="cursor-pointer text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Account</summary>
+          <div class="pl-4 mt-2 space-y-2">
+            <a href="/profile" class="block text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Profile</a>
+            <a href="/settings" class="block text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Settings</a>
+            <a href="/logout" class="block text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Logout</a>
+          </div>
+        </details>
+
+        <button id="toggle-theme-mobile" class="text-purple-700 dark:text-purple-300 focus:outline-none">
+          <svg id="theme-icon-mobile" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"></svg>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 py-10">
+        <div class="max-w-4xl mx-auto space-y-10">
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="space-y-3" id="flash-container">
+                  {% for category, msg in messages %}
+                    <div class="flash-msg px-4 py-3 rounded text-sm font-medium flex justify-between items-center
+                      {% if category == 'success' %}
+                        bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100
+                      {% elif category == 'danger' %}
+                        bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100
+                      {% elif category == 'warning' %}
+                        bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100
+                      {% elif category == 'info' %}
+                        bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100
+                      {% else %}
+                        bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200
+                      {% endif %}
+                    ">
+                      <span>{{ msg }}</span>
+                      <button type="button" class="ml-4 focus:outline-none" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            {% block content %}
+
+            {% endblock %}
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/scripts/notification.js"></script>
+    <script src="../static/scripts/menutoggle.js"></script>
+    <script src="../static/scripts/disappear_.js"></script>
+    <script src="../static/scripts/password_toggle.js"></script>
+    <script src="../static/scripts/email.js"></script>
+    <script>
+      // Profile dropdown toggle (desktop)
+      document.getElementById('profile-menu-toggle').addEventListener('click', () => {
+        document.getElementById('profile-menu').classList.toggle('hidden');
+      });
+    </script>
+
+    {% block additional_js %} {% endblock %}
+</body>
+</html>

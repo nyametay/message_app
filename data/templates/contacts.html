@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Add New Contact -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Add New Contact</h2>
+            <form action="/contacts" method="POST" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input type="text" name="name" placeholder="Full Name" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600" required>
+                <input type="text" name="phone" placeholder="Phone No. eg. +233 234534346" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600" pattern="^\+233\s\d{9}$" required>
+                <!-- <small class="text-gray-500 dark:text-gray-400">Format: +233 234534346</small> -->
+                <input type="email" name="email" placeholder="Email Address" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600">
+                <div class="md:col-span-3 text-right">
+                    <button type="submit" class="px-6 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-500">
+                        Add Contact
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Contacts Table -->
+        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Your Contacts</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 dark:bg-gray-700">
+                            <th class="p-3 border-b dark:border-gray-600">Name</th>
+                            <th class="p-3 border-b dark:border-gray-600">Phone</th>
+                            <th class="p-3 border-b dark:border-gray-600">Email</th>
+                            <th class="p-3 border-b dark:border-gray-600">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if contacts %}
+                            {% for contact in contacts %}
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td class="p-3 border-b dark:border-gray-600">{{ contact.name }}</td>
+                                    <td class="p-3 border-b dark:border-gray-600">{{ contact.phone }}</td>
+                                    <td class="p-3 border-b dark:border-gray-600">{{ contact.email or 'N/A' }}</td>
+                                    <td class="p-3 border-b dark:border-gray-600 flex gap-2">
+                                        <button class="edit-btn px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                data-id="{{ contact.id }}" data-name="{{ contact.name }}"
+                                                data-phone="{{ contact.phone }}" data-email="{{ contact.email }}">
+                                            Edit
+                                        </button>
+                                        <form action="/contacts/delete/{{ contact.id }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                                            <button class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-gray-500 dark:text-gray-400">No contacts found.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Edit Contact Modal -->
+<div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-96 shadow-lg">
+        <h2 class="text-lg font-bold mb-4">Edit Contact</h2>
+        <form id="editForm" method="POST" action="/contacts/edit">
+            <input type="hidden" name="id" id="edit-id">
+            <div class="mb-4">
+                <label class="block mb-2 font-medium">Name</label>
+                <input type="text" name="name" id="edit-name" class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600">
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2 font-medium">Phone</label>
+                <input type="tel" name="phone" id="edit-phone"
+                       class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600" pattern="^\+233\s\d{9}$" >
+                <small class="text-gray-500 dark:text-gray-400">Format: +233 234534346</small>
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2 font-medium">Email</label>
+                <input type="email" name="email" id="edit-email"
+                       class="w-full px-4 py-2 border rounded dark:bg-gray-700 dark:border-gray-600">
+            </div>
+            <div class="flex justify-end gap-4">
+                <button type="button" class="px-4 py-2 bg-gray-400 rounded hover:bg-gray-500" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block additional_js %}
+    <script src="../static/scripts/edit_modal.js"></script>
+{% endblock %}

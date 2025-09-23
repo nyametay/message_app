@@ -1,0 +1,82 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a{
+    text-decoration: none;
+
+}
+
+body{
+    padding: 2% 5%;
+}
+
+.header-container{
+    display: flex;
+    justify-content: space-between;
+}
+
+.company-name{
+    font-size: 2rem;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+}
+
+.company-link{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-nav ul{
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-item{
+    padding: 1rem;
+    margin: 2rem;
+    list-style-type: none;
+    border: 1px solid black;
+    border-radius: 2rem;
+}
+
+.section-text{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 10%;
+}
+
+.text{
+    max-width: 40%;
+}
+
+.text-header{
+    font-size: 3rem;
+    padding-bottom: 1rem;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.text-info{
+    font-size: 1.5rem;
+    font-weight: 100;
+    font-style: italic;
+}
+
+.image img {
+    width: 35%;
+    padding: 1rem;
+}
+/*
+body {
+  background-color: #f9f9fb;
+}
+
+h2 {
+  color: #333;
+}
+*/

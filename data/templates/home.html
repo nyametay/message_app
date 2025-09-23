@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- Main Content -->
+  <main class="px-6 sm:px-10 py-10 max-w-7xl mx-auto space-y-10">
+    <section>
+      <h2 class="text-3xl font-bold mb-4">Welcome Back!</h2>
+      <p class="text-gray-600 dark:text-gray-300">Automate your messages across WhatsApp, Email, and SMS.</p>
+    </section>
+
+    <section class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow">
+      <h3 class="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-400">Quick Actions</h3>
+      <div class="flex flex-wrap gap-4">
+        <a href="/messages" class="px-4 py-2 bg-purple-700 text-white rounded hover:bg-purple-800 dark:bg-purple-600 dark:hover:bg-purple-500">Compose Message</a>
+        <a href="/contacts" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600">Manage Contacts</a>
+        <a href="/logs" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded hover:bg-gray-300 dark:hover:bg-gray-600">View Logs</a>
+      </div>
+    </section>
+
+    <section class="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border dark:border-gray-700">
+        <h3 class="text-xl font-semibold mb-4 text-purple-700 dark:text-purple-400">Scheduled Messages</h3>
+        {% if messages %}
+            <!-- Scheduled Messages Table -->
+            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Saved Messages</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-700 text-left">
+                                <th class="p-3 border-b dark:border-gray-600">Type</th>
+                                <!-- <th class="p-3 border-b dark:border-gray-600">Recipients</th> -->
+                                <th class="p-3 border-b dark:border-gray-600">Message</th>
+                                <th class="p-3 border-b dark:border-gray-600">Schedule</th>
+                                <th class="p-3 border-b dark:border-gray-600">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                {% for msg in messages %}
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                        <td class="p-3 border-b dark:border-gray-600">{{ msg.channel }}</td>
+                                        <!-- <td class="p-3 border-b dark:border-gray-600">{{ msg.recipients }}</td> -->
+                                        <td class="p-3 border-b dark:border-gray-600 truncate max-w-xs">{{ msg.content['message'] }}</td>
+                                        <td class="p-3 border-b dark:border-gray-600">{{ msg.schedule_time }}</td>
+                                        <td class="p-3 border-b dark:border-gray-600">{{ msg.status }}</td>
+                                    </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+        {% else %}
+            <p class="text-gray-600 dark:text-gray-400">You have no scheduled messages. <a href="/messages" class="text-purple-600 dark:text-purple-300 underline">Create one now.</a></p>
+        {% endif %}
+    </section>
+  </main>
+{% endblock %}

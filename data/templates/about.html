@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" class="overflow-x-hidden">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - MessageApp</title>
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans overflow-x-hidden">
+
+<!-- Header -->
+<header class="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 shadow-md">
+
+  <!-- Left: Logo -->
+  <div class="text-2xl font-bold text-purple-700 dark:text-purple-400">MessageApp</div>
+
+  <nav class="flex gap-6 text-sm">
+    <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400">Home</a>
+    <a href="/about" class="text-purple-700 dark:text-purple-400 font-semibold">About</a>
+    <!-- Dark mode toggle (moved here) -->
+      <button id="toggle-theme" class="text-purple-700 dark:text-purple-300 focus:outline-none ml-2">
+        <svg id="theme-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <!-- icon path will be replaced dynamically -->
+        </svg>
+      </button>
+  </nav>
+</header>
+
+<!-- About Content -->
+<section class="px-6 sm:px-10 py-16 max-w-4xl mx-auto">
+  <h1 class="text-4xl font-bold mb-6 text-center">About MessageApp</h1>
+  <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+    MessageApp is a modern automation platform that helps you schedule and send messages via Email, SMS, and WhatsApp — all in one place.
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+    <div>
+      <h2 class="text-2xl font-semibold text-purple-700 dark:text-purple-400 mb-2">Our Mission</h2>
+      <p class="text-gray-600 dark:text-gray-300">
+        To simplify and enhance communication for individuals and businesses by offering seamless message scheduling and delivery solutions across multiple channels.
+      </p>
+    </div>
+    <div>
+      <h2 class="text-2xl font-semibold text-purple-700 dark:text-purple-400 mb-2">Why We Built This</h2>
+      <p class="text-gray-600 dark:text-gray-300">
+        Managing multiple communication platforms can be chaotic. We built MessageApp to unify and automate this process with an easy-to-use interface and powerful backend tools.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-12">
+    <h2 class="text-2xl font-semibold text-purple-700 dark:text-purple-400 mb-2">Tech Stack</h2>
+    <ul class="list-disc pl-6 text-gray-600 dark:text-gray-300">
+      <li>Flask (Backend)</li>
+      <li>Celery + Redis (Task Scheduling)</li>
+      <li>Twilio / SMTP / WhatsApp APIs</li>
+      <li>Tailwind CSS (UI)</li>
+      <li>SQLite / PostgreSQL (Database)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-purple-700 dark:bg-purple-800 text-white px-6 py-6 text-center">
+  <p>&copy; 2025 MessageApp. Built with 💜</p>
+</footer>
+<script src="../static/scripts/disappear.js"></script>
+
+</body>
+</html>

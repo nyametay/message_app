@@ -1,0 +1,44 @@
+services:
+  web:
+    build: .
+    container_name: message_app_web
+    command: flask run --host=0.0.0.0 --port=5000
+    volumes:
+      - .:/app
+      - ./instance:/app/instance   # Persist SQLite DB
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      - FLASK_RUN_HOST=0.0.0.0
+      - FLASK_RUN_PORT=5000
+      - PYTHONUNBUFFERED=1
+    working_dir: /app   # ensure run.py is at /app/run.py
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    container_name: message_app_worker
+    command: celery -A data.celery worker --loglevel=info
+    volumes:
+      - .:/app
+      - ./instance:/app/instance
+    env_file:
+      - .env
+    working_dir: /app   # worker also runs from project root
+    depends_on:
+      - redis
+      - web
+
+  redis:
+    image: redis:7.2
+    container_name: message_app_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

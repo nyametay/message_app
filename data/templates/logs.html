@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-3xl font-bold text-purple-700 dark:text-purple-400">Delivery Logs</h2>
+
+    <!-- Filter Form -->
+    <form method="GET" action="{{ url_for('logs') }}">
+      <select name="status"
+              onchange="this.form.submit()"
+              class="px-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+        <option value="" {% if not request.args.get('status') %}selected{% endif %}>All</option>
+        <option value="sent" {% if request.args.get('status') == 'sent' %}selected{% endif %}>Sent</option>
+        <option value="failed" {% if request.args.get('status') == 'failed' %}selected{% endif %}>Failed</option>
+        <option value="pending" {% if request.args.get('status') == 'pending' %}selected{% endif %}>Pending</option>
+      </select>
+    </form>
+  </div>
+
+  {% if logs %}
+    <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-gray-100 dark:bg-gray-700">
+          <tr>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">Message</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">Channel</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">Delivery Time</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">Status</th>
+            <th class="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200">Error</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+          <tr class="border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 max-w-xs truncate">
+              {{ log.message.content['message'] if log.message and log.message.content else 'N/A' }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">
+              {{ log.message.channel if log.message else 'N/A' }}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+              {{ log.delivery_time.strftime("%Y-%m-%d %H:%M:%S") }}
+            </td>
+            <td class="px-6 py-4">
+              {% if log.delivery_status == 'sent' %}
+                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200">Sent</span>
+              {% elif log.delivery_status == 'failed' %}
+                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200">Failed</span>
+              {% else %}
+                <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-800 dark:text-yellow-200">{{ log.delivery_status }}</span>
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+              {{ log.error_message if log.error_message else '-' }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-gray-600 dark:text-gray-400">No logs available for this filter.</p>
+  {% endif %}
+</div>
+{% endblock %}
