@@ -21,15 +21,16 @@ app.permanent_session_lifetime = timedelta(days=10)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # Database Path
-db_path = os.path.join(instance_dir, "data.db")
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
+# db_path = os.path.join(instance_dir, "data.db")
+DATABASE_URL = os.getenv('DATABASE_URL') #, f"sqlite:///{db_path}")
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize DB
 db = SQLAlchemy(app)
 
 # Celery
-celery = Celery(app.name, broker=os.getenv('CELERY_BROKER_URL'))
+celery = Celery(app.name, broker=os.getenv('CELERY_BROKER_URL'), backend=os.getenv('CELERY_BROKER_URL'))
 celery.conf.update(app.config)
 
 # Import routes
