@@ -39,6 +39,7 @@ def register():
         flash('User Created Successfully', 'success')
         return redirect(url_for('login'))
     except Exception as e:
+        print(str(e))
         return exception_error(e, 'register')
 
 
@@ -356,3 +357,4 @@ def logout():
         return redirect(url_for('index'))
     except Exception as e:
         return exception_error(e, 'logout')
+
