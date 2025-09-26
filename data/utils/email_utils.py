@@ -31,7 +31,7 @@ def send_email(to_email, content):
     try:
         sg = SendGridAPIClient(SENDGRID_API_KEY)
         response = sg.send(message)
-        print(f"Email sent: Status={response.status_code}")
+        print(f"Email sent to {to_email} : Status={response.status_code}")
     except Exception as e:
         print(f"Email failed: {str(e)}")
         raise
@@ -53,3 +53,4 @@ def send_email_smtp(to_email, content):
     except Exception as e:
         print(f"Email sending failed: {e}")
         raise
+
