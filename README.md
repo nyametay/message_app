@@ -198,6 +198,6 @@ Problem	Possible Fix
 MIT License
 
 ## 👨‍💻 Author
-Isaac Nyame Taylor
-📧 nyameget@gmail.com
-💻 github.com/nyameget
+- Isaac Nyame Taylor
+- 📧 nyameget@gmail.com
+- 💻 github.com/nyameget
